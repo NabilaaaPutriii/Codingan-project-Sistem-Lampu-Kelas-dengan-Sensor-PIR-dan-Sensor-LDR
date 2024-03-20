@@ -1,0 +1,48 @@
+#include <LiquidCrystal_I2C.h>
+int led = 13;
+int pirpin = 12;
+int pirState = LOW;
+int val = 0;
+#define ldrpin 7
+LiquidCrystal_I2C lcd(0x27,20,4);
+
+void setup(){
+pinMode(led, OUTPUT);
+pinMode(pirpin, INPUT);
+pinMode(ldrpin, INPUT);
+Serial.begin(9600);
+lcd.init();
+lcd.backlight();
+lcd.setCursor(1,0);
+lcd.print("LAMPU OTOMATIS");
+lcd.setCursor(3,1);
+lcd.print("NABILA");
+delay(2000);
+lcd.clear();
+}
+
+void loop() {
+  val = digitalRead(pirpin);
+  if(val == LOW && digitalRead(ldrpin) == LOW){
+    digitalWrite(led, LOW);
+      lcd.setCursor(0,0);
+      lcd.print("Ruangan Terang");
+    if(pirState == HIGH){
+      lcd.setCursor(0,1);
+      lcd.print("Tidak Ada Gerakan");
+      pirState == LOW;
+  }
+}
+else{
+  if(val == HIGH && digitalRead(ldrpin) == HIGH){
+    digitalWrite(led, HIGH);
+    lcd.setCursor(0,0);
+    lcd.print("Ruangan  Redup");
+    if(pirState == LOW){
+      lcd.setCursor(0,1);
+      lcd.print("Ada Gerakan");
+      pirState == HIGH;
+      }
+    }
+  }
+}
